@@ -1,6 +1,30 @@
-// Wrap all code that interacts with the DOM in a call to jQuery to ensure that
-// the code isn't run until the browser has finished rendering all the elements
-// in the html.
+//This function updates the date ansd time on realtime basis;
+setInterval(() => {
+  var currentday = dayjs().format("dddd, MMM DD, YYYY, hh:mm:ss A");
+  $("#currentDay").text(currentday);
+}, 1000);
+
+function checkHourOfDay() {
+  let currentHour = dayjs().hour();
+  // console.log(typeof currentHour);
+  return currentHour;
+}
+// checkHourOfDay();
+
+$("#time-slots")
+  .children()
+  .each(function (index, element) {
+    let currHour = checkHourOfDay();
+    let el = $(element);
+    let elTime = parseInt(el.attr("time"));
+    if (elTime === currHour) {
+      el.addClass("present");
+    } else if (elTime < currHour) {
+      el.addClass("past");
+    } else {
+      el.addClass("future");
+    }
+  });
 $(function () {
   // TODO: Add a listener for click events on the save button. This code should
   // use the id in the containing time-block as a key to save the user input in
