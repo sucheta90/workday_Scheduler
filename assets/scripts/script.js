@@ -35,7 +35,7 @@ setInterval(() => {
         el.removeClass("present");
       }
     });
-}, 30000);
+}, 1000);
 
 // console.log($(".time-block").children().eq(1));
 
@@ -69,4 +69,10 @@ function renderUserData() {
 
   console.log(prevData);
 }
+
+// Clear schedule
+$("#clear-btn").on("click", function (e) {
+  localStorage.clear();
+  location.reload("/")
+});
 renderUserData();
