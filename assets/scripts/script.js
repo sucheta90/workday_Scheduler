@@ -10,7 +10,6 @@ setInterval(() => {
 //This function gives the current hour of the day
 function checkHourOfDay() {
   let currentHour = dayjs().hour();
-  // console.log(typeof currentHour);
   return currentHour;
 }
 // This changes the class
@@ -20,7 +19,7 @@ setInterval(() => {
     .each(function (index, element) {
       let currHour = checkHourOfDay();
       let el = $(element);
-      let elTime = parseInt(el.attr("time"));
+      let elTime = parseInt(el.attr("data-time"));
       if (elTime === currHour) {
         el.addClass("present");
         el.removeClass("past");
@@ -37,12 +36,9 @@ setInterval(() => {
     });
 }, 1000);
 
-// console.log($(".time-block").children().eq(1));
-
 // The Save btn saved the data input from the schedular to the local storage
 let saveBtn = $(".saveBtn");
 saveBtn.on("click", function (e) {
-  console.log($(e.target).parent());
   let userInput = $(e.target).parent().children().eq(1).val();
   let hourKey = $(e.target).parent().attr("id");
   dataStorage[hourKey] = userInput;
@@ -55,24 +51,24 @@ saveBtn.on("click", function (e) {
 function renderUserData() {
   $(".time-block").children().eq(1).text("");
   let prevData = JSON.parse(localStorage.getItem("userData"));
-  dataStorage = { ...prevData };
-  $("#time-slots")
-    .children()
-    .each(function (index, element) {
-      let el = $(element);
-      console.log(el.attr("id"));
+  if (prevData !== null) {
+    dataStorage = { ...prevData };
+    $("#time-slots")
+      .children()
+      .each(function (index, element) {
+        let el = $(element);
 
-      if (Object.hasOwn(dataStorage, el.attr("id"))) {
-        el.children().eq(1).text(dataStorage[el.attr("id")]);
-      }
-    });
-
-  console.log(prevData);
+        if (Object.hasOwn(dataStorage, el.attr("id"))) {
+          el.children().eq(1).text(dataStorage[el.attr("id")]);
+        }
+      });
+  }
 }
 
 // Clear schedule
 $("#clear-btn").on("click", function (e) {
   localStorage.clear();
-  location.reload("/")
+  location.reload("/");
 });
-renderUserData();
+
+renderUserData(); // this function call extracts the data from the localStorage on page load
